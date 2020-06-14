@@ -22,11 +22,13 @@ Requires:       python3-pyspotify
 Requires:       python3-spotipy
 Requires:       lame
 
+%if 0%{?fedora} || 0%{?rhel} >= 8
 Suggests:       flac
 Suggests:       opus-tools
 Suggests:       vorbis-tools
 Suggests:       fdkaac
 Suggests:       sox
+%endif
 
 %description
 A fork of spotify-ripper that still uses spotipy for a small set of functions,
