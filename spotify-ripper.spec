@@ -1,5 +1,5 @@
 Name:           spotify-ripper
-Version:        2.12
+Version:        2.13
 Release:        1%{?dist}
 Summary:        Command-line ripper for Spotify
 License:        MIT
@@ -56,5 +56,8 @@ options and formating capabilities.
 %{python3_sitelib}/*
 
 %changelog
+* Tue Jul 07 2020 Simone Caronni <negativo17@gmail.com> - 2.13-1
+- Update to 2.13.
+
 * Sat Jun 13 2020 Simone Caronni <negativo17@gmail.com> - 2.12-1
 - First build.
