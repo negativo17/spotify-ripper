@@ -1,5 +1,5 @@
 Name:           spotify-ripper
-Version:        2.13
+Version:        2.14
 Release:        1%{?dist}
 Summary:        Command-line ripper for Spotify
 License:        MIT
@@ -16,19 +16,14 @@ BuildRequires:  python3-devel
 #BuildRequires:  python3-requests
 #BuildRequires:  python3-schedule
 
-Requires:       python3-colorama
-Requires:       python3-mutagen
-Requires:       python3-pyspotify
-Requires:       python3-spotipy
 Requires:       lame
 
-%if 0%{?fedora} || 0%{?rhel} >= 8
+Suggests:       fdkaac
+Suggests:       ffmpeg
 Suggests:       flac
 Suggests:       opus-tools
-Suggests:       vorbis-tools
-Suggests:       fdkaac
 Suggests:       sox
-%endif
+Suggests:       vorbis-tools
 
 %description
 A fork of spotify-ripper that still uses spotipy for a small set of functions,
@@ -38,7 +33,7 @@ WebAPI functions now require an authorization token. This fork also adds a few
 options and formating capabilities.
 
 %prep
-%autosetup
+%autosetup -p1
 
 %build
 %{__python3} setup.py build
@@ -56,6 +51,10 @@ options and formating capabilities.
 %{python3_sitelib}/*
 
 %changelog
+* Wed Jul 08 2020 Simone Caronni <negativo17@gmail.com> - 2.14-1
+- Update to 2.14.
+- Use automatic Python depencency generator.
+
 * Tue Jul 07 2020 Simone Caronni <negativo17@gmail.com> - 2.13-1
 - Update to 2.13.
 
