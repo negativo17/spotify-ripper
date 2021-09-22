@@ -1,6 +1,6 @@
 Name:           spotify-ripper
 Version:        2.17
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Command-line ripper for Spotify
 License:        MIT
 URL:            https://github.com/scaronni/%{name}
@@ -9,6 +9,7 @@ BuildArch:      noarch
 Source0:        %{url}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
 
 # For tests
 #BuildRequires:  python3-colorama
@@ -51,6 +52,9 @@ options and formating capabilities.
 %{python3_sitelib}/*
 
 %changelog
+* Wed Sep 22 2021 Fabio Valentini <decathorpe@gmail.com> - 2.17-2
+- Add BR: python3-setuptools to fix build on Fedora 35+.
+
 * Tue Mar 16 2021 Simone Caronni <negativo17@gmail.com> - 2.17-1
 - Update to 2.17.
 
