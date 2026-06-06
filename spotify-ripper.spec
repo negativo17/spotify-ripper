@@ -1,5 +1,5 @@
 Name:           spotify-ripper
-Version:        2.18
+Version:        3.0.3
 Release:        1%{?dist}
 Summary:        Command-line ripper for Spotify
 License:        MIT
@@ -9,49 +9,40 @@ BuildArch:      noarch
 Source0:        %{url}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-
-# For tests
-#BuildRequires:  python3-colorama
-#BuildRequires:  python3-mutagen
-#BuildRequires:  python3-requests
-#BuildRequires:  python3-schedule
 
 Requires:       lame
-
-Suggests:       fdkaac
-Suggests:       ffmpeg
-Suggests:       flac
-Suggests:       opus-tools
-Suggests:       sox
-Suggests:       vorbis-tools
+Recommends:     fdkaac
+Recommends:     ffmpeg
+Recommends:     flac
+Recommends:     opus-tools
+Recommends:     sox
 
 %description
-A fork of spotify-ripper that still uses spotipy for a small set of functions,
-but progressively moves to Spotify's WebAPI for most functions (e.g. playlist
-functions), including the automated handling of tokens given the fact that most
-WebAPI functions now require an authorization token. This fork also adds a few
-options and formating capabilities.
+A Spotify ripper that uses Librespot in the backend. Requires a Premium account
+for usage.Ripping music from Spotify violates Terms and Conditions of Use:
+https://www.spotify.com/legal
 
 %prep
 %autosetup -p1
+%generate_buildrequires
+%pyproject_buildrequires
 
 %build
-%{__python3} setup.py build
+%pyproject_wheel
 
 %install
-%{__python3} setup.py install -O1 --skip-build --root %{buildroot}
+%pyproject_install
+%pyproject_save_files spotify_ripper
 
-#%check
-#%{__python3} setup.py test
-
-%files
+%files -f %{pyproject_files}
 %license LICENSE
 %doc README.md
 %{_bindir}/%{name}
-%{python3_sitelib}/*
 
 %changelog
+* Sat Jun 06 2026 Simone Caronni <negativo17@gmail.com> - 3.0.3-1
+- Update to rewritten 3.0.3 using librespot-python!
+
 * Sun Oct 24 2021 Simone Caronni <negativo17@gmail.com> - 2.18-1
 - Update to 2.18.
 
