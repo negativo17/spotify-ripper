@@ -1,5 +1,5 @@
 Name:           spotify-ripper
-Version:        3.0.3
+Version:        3.2.0
 Release:        1%{?dist}
 Summary:        Command-line ripper for Spotify
 License:        MIT
@@ -40,6 +40,9 @@ https://www.spotify.com/legal
 %{_bindir}/%{name}
 
 %changelog
+* Wed Jun 10 2026 Simone Caronni <negativo17@gmail.com> - 3.2.0-1
+- Update to 3.2.0.
+
 * Sat Jun 06 2026 Simone Caronni <negativo17@gmail.com> - 3.0.3-1
 - Update to rewritten 3.0.3 using librespot-python!
 
