@@ -1,45 +1,89 @@
+%bcond check 1
+
+# librespot is pinned to a git snapshot in Cargo.toml
+%global librespot_commit e023adbbf017ae1fc10d01531dbe50c409786f2d
+
 Name:           spotify-ripper
-Version:        3.2.0
+Version:        4.0.0
 Release:        1%{?dist}
 Summary:        Command-line ripper for Spotify
-License:        MIT
+License:        MIT AND Apache-2.0 AND BSD-3-Clause AND Unicode-3.0 AND Zlib AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND (LGPL-3.0-or-later OR MPL-2.0) AND (MIT OR Apache-2.0 OR LGPL-2.1-or-later) AND (MIT OR BSD-3-Clause) AND (MIT OR Zlib OR Apache-2.0) AND (Unlicense OR MIT)
+# Detailed breakdown, from %%cargo_license_summary; LICENSE.dependencies in the
+# package contains the full per-crate listing:
+# (MIT OR Apache-2.0) AND Unicode-3.0
+# 0BSD OR MIT OR Apache-2.0
+# Apache-2.0
+# Apache-2.0 OR BSL-1.0
+# Apache-2.0 OR MIT
+# Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT
+# BSD-2-Clause OR Apache-2.0 OR MIT
+# BSD-3-Clause
+# LGPL-3.0-or-later OR MPL-2.0
+# MIT
+# MIT OR Apache-2.0
+# MIT OR Apache-2.0 OR LGPL-2.1-or-later
+# MIT OR BSD-3-Clause
+# MIT OR Zlib OR Apache-2.0
+# Unicode-3.0
+# Unlicense OR MIT
+# Zlib
+# Zlib OR Apache-2.0 OR MIT
 URL:            https://github.com/scaronni/%{name}
-BuildArch:      noarch
 
 Source0:        %{url}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# Generated with spotify-ripper-vendor.sh
+Source1:        %{name}-%{version}-vendor.tar.xz
 
-BuildRequires:  python3-devel
+BuildRequires:  cargo-rpm-macros >= 26
+BuildRequires:  pkgconfig(openssl)
 
+Requires:       /usr/bin/ffmpeg
 Requires:       lame
 Recommends:     fdkaac
-Recommends:     ffmpeg
 Recommends:     flac
 Recommends:     opus-tools
 Recommends:     sox
 
 %description
-A Spotify ripper that uses Librespot in the backend. Requires a Premium account
-for usage.Ripping music from Spotify violates Terms and Conditions of Use:
+A Spotify ripper that uses librespot in the backend. Requires a Premium account
+for usage. Ripping music from Spotify violates Terms and Conditions of Use:
 https://www.spotify.com/legal
 
 %prep
-%autosetup -p1
-%generate_buildrequires
-%pyproject_buildrequires
+%autosetup -p1 -a1
+%cargo_prep -v vendor
+cat >> .cargo/config.toml << EOF
+[source."git+https://github.com/librespot-org/librespot?rev=%{librespot_commit}"]
+git = "https://github.com/librespot-org/librespot"
+rev = "%{librespot_commit}"
+replace-with = "vendored-sources"
+EOF
 
 %build
-%pyproject_wheel
+%cargo_build
+%{cargo_license_summary}
+%{cargo_license} > LICENSE.dependencies
+%{cargo_vendor_manifest}
 
 %install
-%pyproject_install
-%pyproject_save_files spotify_ripper
+%cargo_install
 
-%files -f %{pyproject_files}
+%if %{with check}
+%check
+%cargo_test
+%endif
+
+%files
 %license LICENSE
+%license LICENSE.dependencies
+%license cargo-vendor.txt
 %doc README.md
 %{_bindir}/%{name}
 
 %changelog
+* Thu Oct 08 2026 Simone Caronni <negativo17@gmail.com> - 4.0.0-1
+- Update to 4.0.0, rewritten in Rust.
+
 * Wed Jun 10 2026 Simone Caronni <negativo17@gmail.com> - 3.2.0-1
 - Update to 3.2.0.
 
