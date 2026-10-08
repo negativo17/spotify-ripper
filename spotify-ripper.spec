@@ -3,8 +3,11 @@
 # librespot is pinned to a git snapshot in Cargo.toml
 %global librespot_commit e023adbbf017ae1fc10d01531dbe50c409786f2d
 
+# cargo install ignores Cargo.lock otherwise, and git sources can't be resolved against vendored sources
+%global __cargo_common_opts %{__cargo_common_opts} --locked
+
 Name:           spotify-ripper
-Version:        4.0.0
+Version:        4.1.0
 Release:        1%{?dist}
 Summary:        Command-line ripper for Spotify
 License:        MIT AND Apache-2.0 AND BSD-3-Clause AND Unicode-3.0 AND Zlib AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND (LGPL-3.0-or-later OR MPL-2.0) AND (MIT OR Apache-2.0 OR LGPL-2.1-or-later) AND (MIT OR BSD-3-Clause) AND (MIT OR Zlib OR Apache-2.0) AND (Unlicense OR MIT)
@@ -81,6 +84,9 @@ EOF
 %{_bindir}/%{name}
 
 %changelog
+* Thu Oct 08 2026 Simone Caronni <negativo17@gmail.com> - 4.1.0-1
+- Update to 4.1.0.
+
 * Thu Oct 08 2026 Simone Caronni <negativo17@gmail.com> - 4.0.0-1
 - Update to 4.0.0, rewritten in Rust.
 
